@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="naru.narucof.backend.dao.TodoMapper">
+
+  <select id="selectTodoList" resultType="naru.narucof.backend.dto.TodoDto">
+    SELECT * from naru.todo where userId = #{userId};
+  </select>
+
+<insert id="insertTodo" parameterType="naru.narucof.backend.dto.TodoDto">
+    INSERT INTO naru.todo (userId, title, done) VALUES (#{userId}, #{title}, #{done})
+</insert>
+
+
+<update id="updateTodo" parameterType="naru.narucof.backend.dto.TodoDto">
+    UPDATE naru.todo set title = #{title}
+	 WHERE userId = #{userId}
+	 AND   id = #{id}
+</update>
+
+<delete id="deleteTodo" parameterType="naru.narucof.backend.dto.TodoDto">
+    DELETE FROM naru.todo
+	 WHERE userId = #{userId}
+	 AND   id = #{id}
+</delete>
+
+
+
+</mapper>

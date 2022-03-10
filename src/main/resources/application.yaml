@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://localhost:3306/naru?serverTimezone=UTC&characterEncoding=utf8
+        
+    username: root
+    password: qwe30117
+    
+mybatis:
+  config : mybatis-config.xml
+  type-aliases-package: com.example.demo.model    
+  mapper-locations: mybatis/mapper/*.xml
+  
+  
+  logging:
+  level:
+    jdbc.sqlonly: DEBUG
+    org.springframework.web: DEBUG
+    com.zaxxer.hikari.HikariDataSource: ERROR
