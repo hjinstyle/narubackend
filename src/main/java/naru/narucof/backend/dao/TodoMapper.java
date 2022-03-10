@@ -9,7 +9,7 @@ import naru.narucof.backend.dto.TodoDto;
 @Repository
 @Mapper
 public interface  TodoMapper {
-	 //todo select (ÀÌ¸ŞÀÏ¾ÆÀÌµğ·Î Å×ÀÌºí Á¶È¸)
+	 //todo select (ì´ë©”ì¼ì•„ì´ë””ë¡œ í…Œì´ë¸” ì¡°íšŒ)
 	 List<TodoDto> selectTodoList(String userId);
 	 
 	 int insertTodo(TodoDto todoDto);

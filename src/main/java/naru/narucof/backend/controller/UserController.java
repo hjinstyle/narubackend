@@ -25,20 +25,20 @@ public class UserController {
 	private TokenProvider tokenProvider;
 	
 	/*
-	 * È¸¿ø °¡ÀÔ
+	 * íšŒì› ê°€ì…
 	 */
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody UserDto userDTO) {
 		try {
 
-			//È¸¿ø°¡ÀÔ ·ÎÁ÷ È£Ãâ
+			//íšŒì›ê°€ì… ë¡œì§ í˜¸ì¶œ
 			int registeredUser = userService.signUp(userDTO);			
 
-			// À¯Àú Á¤º¸´Â Ç×»ó ÇÏ³ªÀÌ¹Ç·Î ±×³É ¸®½ºÆ®·Î ¸¸µé¾î¾ßÇÏ´Â ResponseDTO¸¦ »ç¿ëÇÏÁö ¾Ê°í ±×³É UserDTO ¸®ÅÏ.
+			// ìœ ì € ì •ë³´ëŠ” í•­ìƒ í•˜ë‚˜ì´ë¯€ë¡œ ê·¸ëƒ¥ ë¦¬ìŠ¤íŠ¸ë¡œ ë§Œë“¤ì–´ì•¼í•˜ëŠ” ResponseDTOë¥¼ ì‚¬ìš©í•˜ì§€ ì•Šê³  ê·¸ëƒ¥ UserDTO ë¦¬í„´.
 			return ResponseEntity.ok(registeredUser);
 
 		} catch (Exception e) {
-			// ¿¹¿Ü°¡ ³ª´Â °æ¿ì bad ¸®½ºÆù½º ¸®ÅÏ.
+			// ì˜ˆì™¸ê°€ ë‚˜ëŠ” ê²½ìš° bad ë¦¬ìŠ¤í°ìŠ¤ ë¦¬í„´.
 			ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
 			return ResponseEntity.badRequest().body(responseDTO);
 		}
@@ -46,28 +46,28 @@ public class UserController {
 
 	
 	/*
-	 * ·Î±×ÀÎ
+	 * ë¡œê·¸ì¸
 	 */
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticate(@RequestBody UserDto userDTO) {
 		
-		//È­¸é¿¡¼­ ³Ñ¾î¿Â userDto¸¦ service¿¡ Àü´Ş
+		//í™”ë©´ì—ì„œ ë„˜ì–´ì˜¨ userDtoë¥¼ serviceì— ì „ë‹¬
 		UserDto result = userService.signIn(userDTO);
 
 		
-		//DB¿¡ À¯ÀúÁ¤º¸°¡ Á¸ÀçÇÑ´Ù¸é
+		//DBì— ìœ ì €ì •ë³´ê°€ ì¡´ì¬í•œë‹¤ë©´
 		if(result != null) {
 
-			//ÅäÅ« »ı¼ºÈÄ setTokenÀ¸·Î À¯Àúdto¿¡ ´ã¾ÆÁÜ
+			//í† í° ìƒì„±í›„ setTokenìœ¼ë¡œ ìœ ì €dtoì— ë‹´ì•„ì¤Œ
 			result.setToken(tokenProvider.create(result));
 				
-			//È­¸é¿¡ À¯ÀúÁ¤º¸ ¸®ÅÏ
+			//í™”ë©´ì— ìœ ì €ì •ë³´ ë¦¬í„´
 			return ResponseEntity.ok().body(result);
 	
-		//DB¿¡ À¯ÀúÁ¤º¸°¡ ¾ø´Ù¸é
+		//DBì— ìœ ì €ì •ë³´ê°€ ì—†ë‹¤ë©´
 		} else {
 			ResponseDTO responseDTO = ResponseDTO.builder()
-							.error("°èÁ¤ÀÌ ¾ø°Å³ª ÆĞ½º¿öµå°¡ Æ²·È½À´Ï´Ù.")
+							.error("ê³„ì •ì´ ì—†ê±°ë‚˜ íŒ¨ìŠ¤ì›Œë“œê°€ í‹€ë ¸ìŠµë‹ˆë‹¤.")
 							.build();
 			return ResponseEntity
 							.badRequest()

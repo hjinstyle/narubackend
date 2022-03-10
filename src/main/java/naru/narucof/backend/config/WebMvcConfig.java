@@ -4,17 +4,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration // ½ºÇÁ¸µ ºóÀ¸·Î µî·Ï
+@Configuration // ìŠ¤í”„ë§ ë¹ˆìœ¼ë¡œ ë“±ë¡
 public class WebMvcConfig implements WebMvcConfigurer {
 	private final long MAX_AGE_SECS = 3600;
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		// ¸ğµç °æ·Î¿¡ ´ëÇØ
+		// ëª¨ë“  ê²½ë¡œì— ëŒ€í•´
 		registry.addMapping("/**")
-						// OriginÀÌ http:localhost:3000¿¡ ´ëÇØ
+						// Originì´ http:localhost:3000ì— ëŒ€í•´
 						.allowedOrigins("http://localhost:3000","http://narufe.ap-northeast-2.elasticbeanstalk.com")
-						// GET, POST, PUT, PATCH, DELETE, OPTIONS ¸Ş¼­µå¸¦ Çã¿ëÇÑ´Ù.
+						// GET, POST, PUT, PATCH, DELETE, OPTIONS ë©”ì„œë“œë¥¼ í—ˆìš©í•œë‹¤.
 						.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
 						.allowedHeaders("*")
 						.allowCredentials(true)

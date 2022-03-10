@@ -2,8 +2,8 @@ server:
   port : 5000
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${rds.hostname}:${rds.port}/${rds.db.name}
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://${rds.hostname}:${rds.port}/${rds.db.name}
     username: ${rds.username}
     password: ${rds.password}
 
@@ -11,3 +11,9 @@ mybatis:
   config : mybatis-config.xml
   type-aliases-package: com.example.demo.model    
   mapper-locations: mybatis/mapper/*.xml
+  
+logging:
+  level:
+    jdbc.sqlonly: DEBUG
+    org.springframework.web: DEBUG
+    com.zaxxer.hikari.HikariDataSource: ERROR

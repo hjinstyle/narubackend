@@ -15,7 +15,7 @@ import naru.narucof.backend.dto.ResponseDTO;
 import naru.narucof.backend.dto.TestRequestBodyDTO;
 
 @RestController
-@RequestMapping("test") //¸®¼Ò½º
+@RequestMapping("test") //ë¦¬ì†ŒìŠ¤
 public class TestController {
 	@GetMapping("testGet")
 	public String testController() {
@@ -52,13 +52,3 @@ public class TestController {
 		return ResponseEntity.ok().body(response);
 	}	
 }
-
-
-
-
-
-
-
-
-
-

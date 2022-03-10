@@ -19,14 +19,14 @@ import naru.narucof.backend.service.TodoService;
 
 
 @RestController
-@RequestMapping("todo") //¸®¼Ò½º
+@RequestMapping("todo") //ë¦¬ì†ŒìŠ¤
 public class TodoController {
 	@Autowired
 	private TodoService todoService;
 	
 
 	/*
-	 * °Ô½Ã±Û ¸ñ·Ï Á¶È¸ (ÃÖÃÊ localhost:3030/ ÀÏ¶§¸¸ »ç¿ëÇÑ´Ù.
+	 * ê²Œì‹œê¸€ ëª©ë¡ ì¡°íšŒ (ìµœì´ˆ localhost:3030/ ì¼ë•Œë§Œ ì‚¬ìš©í•œë‹¤.
 	 */
 	@GetMapping
 	public ResponseEntity<?> retrieveTodoList(@AuthenticationPrincipal String userId) {
@@ -37,12 +37,12 @@ public class TodoController {
 		
 		ResponseDTO<TodoDto> response = ResponseDTO.<TodoDto>builder().data(result).build();
 
-		// (7) ResponseDTO¸¦ ¸®ÅÏÇÑ´Ù.
+		// (7) ResponseDTOë¥¼ ë¦¬í„´í•œë‹¤.
 		return ResponseEntity.ok().body(response);
 	}	
 	
 	/*
-	 * °Ô½Ã±Û Ãß°¡¹öÆ° Å¬¸¯
+	 * ê²Œì‹œê¸€ ì¶”ê°€ë²„íŠ¼ í´ë¦­
 	 */
 	@PostMapping
 	public ResponseEntity<?> createTodo(@AuthenticationPrincipal String userId, @RequestBody TodoDto todoDto) {
@@ -67,7 +67,7 @@ public class TodoController {
 
 
 	/*
-	 * °Ô½Ã±Û ¼öÁ¤ ¹öÆ° Å¬¸¯
+	 * ê²Œì‹œê¸€ ìˆ˜ì • ë²„íŠ¼ í´ë¦­
 	 */
 	
 	@PutMapping
@@ -83,7 +83,7 @@ public class TodoController {
 	}
 
 	/*
-	 * °Ô½Ã±Û ¿· ÈŞÁöÅë ¾ÆÀÌÄÜ Å¬¸¯ ½Ã »èÁ¦
+	 * ê²Œì‹œê¸€ ì˜† íœ´ì§€í†µ ì•„ì´ì½˜ í´ë¦­ ì‹œ ì‚­ì œ
 	 */
 	
 	@DeleteMapping
@@ -103,7 +103,4 @@ public class TodoController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-
-
-	  
 }

@@ -9,10 +9,10 @@ import naru.narucof.backend.dto.UserDto;
 @Repository
 @Mapper
 public interface  UserMapper {
-	 //ÀÌ¸ŞÀÏ¾ÆÀÌµğ·Î Å×ÀÌºí Á¶È¸.
+	 //ì´ë©”ì¼ì•„ì´ë””ë¡œ í…Œì´ë¸” ì¡°íšŒ.
 	 List<UserDto> selectFindByEmail(UserDto userDto);
 	 
-	 //È¸¿ø°¡ÀÔ
+	 //íšŒì›ê°€ì…
 	 int insertSignUp(UserDto userDto);
 
 	 

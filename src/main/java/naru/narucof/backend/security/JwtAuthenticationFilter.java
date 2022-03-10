@@ -28,40 +28,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private TokenProvider tokenProvider;
 
 	/*
-	 * ·Î±×ÀÎÀ» ÇÏ¿´´Ù¸é È­¸é¿¡¼­ ´øÁø ÅäÅ«ÀÌ Á¸ÀçÇÑ´Ù -> ÅäÅ«ÀÌ Á¸ÀçÇÑ´Ù¸é @AuthenticationPrincipal¿¡ userId¸¦ ÀúÀåÇÑ´Ù-> ÄÁÆ®·Ñ·¯ÀÇ ÀÎÀÚ °ªÀ¸·Î ³Ñ°ÜÁØ´Ù.
+	 * ë¡œê·¸ì¸ì„ í•˜ì˜€ë‹¤ë©´ í™”ë©´ì—ì„œ ë˜ì§„ í† í°ì´ ì¡´ì¬í•œë‹¤ -> í† í°ì´ ì¡´ì¬í•œë‹¤ë©´ @AuthenticationPrincipalì— userIdë¥¼ ì €ì¥í•œë‹¤-> ì»¨íŠ¸ë¡¤ëŸ¬ì˜ ì¸ì ê°’ìœ¼ë¡œ ë„˜ê²¨ì¤€ë‹¤.
 	 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		try {
-			// È­¸é¿¡¼­ ´øÁø ÅäÅ«À» ÆÄ½ÌÇÑ´Ù.
+			// í™”ë©´ì—ì„œ ë˜ì§„ í† í°ì„ íŒŒì‹±í•œë‹¤.
 			String token = parseBearerToken(request);
 			
 			log.info("Filter is running...");
 			
-			//¸¸¾à È­¸é¿¡¼­ ´øÁø ÅäÅ«ÀÌ Á¸ÀçÇÑ´Ù¸é   @AuthenticationPrincipal¿¡ userId¸¦ ÀúÀåÇÑ´Ù.    (ÅäÅ« °Ë»çÇÏ±â. JWTÀÌ¹Ç·Î ÀÎ°¡ ¼­¹ö¿¡ ¿äÃ» ÇÏÁö ¾Ê°íµµ °ËÁõ °¡´É.)
+			//ë§Œì•½ í™”ë©´ì—ì„œ ë˜ì§„ í† í°ì´ ì¡´ì¬í•œë‹¤ë©´   @AuthenticationPrincipalì— userIdë¥¼ ì €ì¥í•œë‹¤.    (í† í° ê²€ì‚¬í•˜ê¸°. JWTì´ë¯€ë¡œ ì¸ê°€ ì„œë²„ì— ìš”ì²­ í•˜ì§€ ì•Šê³ ë„ ê²€ì¦ ê°€ëŠ¥.)
 			if (token != null && !token.equalsIgnoreCase("null")) {
 				
 				
-				//È­¸é¿¡¼­ ´øÁø ÅäÅ«ÀÌÁ¸ÀçÇÑ´Ù¸é ÆÄ½ÌÇØ¼­ userId¸¦ °¡Á®¿À±â. (À§Á¶ µÈ °æ¿ì ÀÍ¼Á¼Ç Ã³¸® µÈ´Ù.)
+				//í™”ë©´ì—ì„œ ë˜ì§„ í† í°ì´ì¡´ì¬í•œë‹¤ë©´ íŒŒì‹±í•´ì„œ userIdë¥¼ ê°€ì ¸ì˜¤ê¸°. (ìœ„ì¡° ëœ ê²½ìš° ìµì…‰ì…˜ ì²˜ë¦¬ ëœë‹¤.)
 				String userId = tokenProvider.validateAndGetUserId(token);
 				log.info("Authenticated user ID : " + userId );
 				
-				// ÀÎÁõ ¿Ï·á; SecurityContextHolder¿¡ µî·ÏÇØ¾ß ÀÎÁõµÈ »ç¿ëÀÚ¶ó°í »ı°¢ÇÑ´Ù.
+				// ì¸ì¦ ì™„ë£Œ; SecurityContextHolderì— ë“±ë¡í•´ì•¼ ì¸ì¦ëœ ì‚¬ìš©ìë¼ê³  ìƒê°í•œë‹¤.
 				AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-								userId, // <- ÃßÈÄ ÄÁÆ®·Ñ·¯ÀÇ ÆÄ¶ó¹ÌÅÍÀÎ @AuthenticationPrincipal (¶Ç´Â principal) ·Î ºÒ·¯¿Ã ¼ö ÀÖ´Ù.
+								userId, // <- ì¶”í›„ ì»¨íŠ¸ë¡¤ëŸ¬ì˜ íŒŒë¼ë¯¸í„°ì¸ @AuthenticationPrincipal (ë˜ëŠ” principal) ë¡œ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ìˆë‹¤.
 								null, //
 								AuthorityUtils.NO_AUTHORITIES
 				);
 				/*
-				 * SecurityContext´Â ÅëÇàµµÀåÀÌ ÂïÈù ÅëÇàÁõÀÌ´Ù.(Á¢±Ù ÁÖÃ¼¿Í ÀÎÁõ¿¡ ´ëÇÑ Á¤º¸¸¦ °®°íÀÖ´Â context
-				 * ¾Æ·¡¼Ò½º¿¡ µî·Ï ÇØÁÖ¸é WebSecurityConfigÀÇ ±ÇÇÑ Åë°úµÈ´Ù. 
+				 * SecurityContextëŠ” í†µí–‰ë„ì¥ì´ ì°íŒ í†µí–‰ì¦ì´ë‹¤.(ì ‘ê·¼ ì£¼ì²´ì™€ ì¸ì¦ì— ëŒ€í•œ ì •ë³´ë¥¼ ê°–ê³ ìˆëŠ” context
+				 * ì•„ë˜ì†ŒìŠ¤ì— ë“±ë¡ í•´ì£¼ë©´ WebSecurityConfigì˜ ê¶Œí•œ í†µê³¼ëœë‹¤. 
 				 */
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 				SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 				securityContext.setAuthentication(authentication);
 
-				//µî·ÏÇØÁÖ´Â ÀÌÀ¯? : ÃßÈÄ ÀÎÁõ¿©ºÎ È®ÀÎÀ» À§ÇØ.
+				//ë“±ë¡í•´ì£¼ëŠ” ì´ìœ ? : ì¶”í›„ ì¸ì¦ì—¬ë¶€ í™•ì¸ì„ ìœ„í•´.
 				SecurityContextHolder.setContext(securityContext);
 				
 				
@@ -71,12 +71,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			logger.error("Could not set user authentication in security context", ex);
 		}
 
-		//À§ ·ÎÁ÷¿¡¼­ ÅäÅ«ÀÌ Á¸ÀçÇÒ¶§¸¸ ¾Æ·¡ ÇÊÅÍ¸µ Åë°ú
+		//ìœ„ ë¡œì§ì—ì„œ í† í°ì´ ì¡´ì¬í• ë•Œë§Œ ì•„ë˜ í•„í„°ë§ í†µê³¼
 		filterChain.doFilter(request, response);
 	}
 
 	private String parseBearerToken(HttpServletRequest request) {
-		// Http ¸®Äù½ºÆ®ÀÇ Çì´õ¸¦ ÆÄ½ÌÇØ Bearer ÅäÅ«À» ¸®ÅÏÇÑ´Ù.
+		// Http ë¦¬í€˜ìŠ¤íŠ¸ì˜ í—¤ë”ë¥¼ íŒŒì‹±í•´ Bearer í† í°ì„ ë¦¬í„´í•œë‹¤.
 		String bearerToken = request.getHeader("Authorization");
 
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {

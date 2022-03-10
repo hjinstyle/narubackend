@@ -17,11 +17,11 @@ import naru.narucof.backend.dto.UserDto;
 public class TokenProvider {
 	private static final String SECRET_KEY = "NMA8JPctFuna59f5";
 
-	/*·Î±×ÀÎ ½Ã Åä±Ù ¾ÏÈ£È­ »ı¼º ¸Ş¼­µå
+	/*ë¡œê·¸ì¸ ì‹œ í† ê·¼ ì•”í˜¸í™” ìƒì„± ë©”ì„œë“œ
 	 * 
 	 */
 	public String create(UserDto userDto) {
-		// ±âÇÑ Áö±İÀ¸·ÎºÎÅÍ 1ÀÏ·Î ¼³Á¤
+		// ê¸°í•œ ì§€ê¸ˆìœ¼ë¡œë¶€í„° 1ì¼ë¡œ ì„¤ì •
 		Date expiryDate = Date.from(
 						Instant.now()
 						.plus(1, ChronoUnit.DAYS));
@@ -36,38 +36,38 @@ public class TokenProvider {
 		  "iat":1595733657,
 		  "exp":1596597657
 		}.
-		// SECRET_KEY¸¦ ÀÌ¿ëÇØ ¼­¸íÇÑ ºÎºĞ
+		// SECRET_KEYë¥¼ ì´ìš©í•´ ì„œëª…í•œ ë¶€ë¶„
 		Nn4d1MOVLZg79sfFACTIpCPKqWmpZMZQsbNrXdJJNWkRv50_l7bPLQPwhMobT4vBOG6Q3JYjhDrKFlBSaUxZOg
 		 */
-		// JWT Token »ı¼º
+		// JWT Token ìƒì„±
 		return Jwts.builder()
-						// header¿¡ µé¾î°¥ ³»¿ë ¹× ¼­¸íÀ» ÇÏ±â À§ÇÑ SECRET_KEY
+						// headerì— ë“¤ì–´ê°ˆ ë‚´ìš© ë° ì„œëª…ì„ í•˜ê¸° ìœ„í•œ SECRET_KEY
 						.signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-						// payload¿¡ µé¾î°¥ ³»¿ë
-						.setSubject(userDto.getUserId()) // sub     //subject¿¡ ¾ÆÀÌµğ¸¦ ¼ÂÆÃ ÇØÁá´Ù. ÃßÈÄ µğÄÚµù ½Ã subject ÃßÃâÇÑ´Ù.
+						// payloadì— ë“¤ì–´ê°ˆ ë‚´ìš©
+						.setSubject(userDto.getUserId()) // sub     //subjectì— ì•„ì´ë””ë¥¼ ì…‹íŒ… í•´ì¤¬ë‹¤. ì¶”í›„ ë””ì½”ë”© ì‹œ subject ì¶”ì¶œí•œë‹¤.
 						.setIssuer("demo app") // iss
 						.setIssuedAt(new Date()) // iat
 						.setExpiration(expiryDate) // exp
 						.compact();
 	}
 
-	/*È­¸éÁ¢¼Ó ½Ã ¸¶´Ù ½ÇÇàµÇ´Â ÅäÅ« º¹È£È­ ÆÄ½Ì ¸Ş¼­µå
+	/*í™”ë©´ì ‘ì† ì‹œ ë§ˆë‹¤ ì‹¤í–‰ë˜ëŠ” í† í° ë³µí˜¸í™” íŒŒì‹± ë©”ì„œë“œ
 	 * 
 	 * */
 	public String validateAndGetUserId(String token) {
-		/*³»¼³¸í : È­¸é¿¡¼­´øÁø ÅäÅ«´øÁü-> ÀÎÅÍ¼ÁÅÍ¿¡¼­ ÅäÅ«ÀÌÁ¸Àç ÆÇ´Ü-> ÅäÅ« Á¸ÀçÇÑ´Ù¸é 
-		 *     -> ÀÌ¸Ş¼­µå¿¡¼­ ÇØ´ç ÅäÅ«À» ÀÎÀÚ·Î ¹Ş¾Æ¼­ ÆÄ½ÌÇÑ´Ù(ÆÄ½Ì¹æ¹ı:SECRET_KEY»ó¼ö·Î ÅäÅ«À» º¹È£È­ÇÔ) -> º¹È£È­µÈ °ª Áß userId¸¦ ¸®ÅÏÇØÁØ´Ù.
+		/*ë‚´ì„¤ëª… : í™”ë©´ì—ì„œë˜ì§„ í† í°ë˜ì§-> ì¸í„°ì…‰í„°ì—ì„œ í† í°ì´ì¡´ì¬ íŒë‹¨-> í† í° ì¡´ì¬í•œë‹¤ë©´ 
+		 *     -> ì´ë©”ì„œë“œì—ì„œ í•´ë‹¹ í† í°ì„ ì¸ìë¡œ ë°›ì•„ì„œ íŒŒì‹±í•œë‹¤(íŒŒì‹±ë°©ë²•:SECRET_KEYìƒìˆ˜ë¡œ í† í°ì„ ë³µí˜¸í™”í•¨) -> ë³µí˜¸í™”ëœ ê°’ ì¤‘ userIdë¥¼ ë¦¬í„´í•´ì¤€ë‹¤.
 		 */
 		
-		// parseClaimsJws¸Ş¼­µå°¡ Base 64·Î µğÄÚµù ¹× ÆÄ½Ì.
-		// Áï, Çì´õ¿Í ÆäÀÌ·Îµå¸¦ setSigningKey·Î ³Ñ¾î¿Â ½ÃÅ©¸´À» ÀÌ¿ë ÇØ ¼­¸í ÈÄ, tokenÀÇ ¼­¸í °ú ºñ±³.
-		// À§Á¶µÇÁö ¾Ê¾Ò´Ù¸é ÆäÀÌ·Îµå(Claims) ¸®ÅÏ
-		// ±× Áß ¿ì¸®´Â userId°¡ ÇÊ¿äÇÏ¹Ç·Î getBody¸¦ ºÎ¸¥´Ù.
+		// parseClaimsJwsë©”ì„œë“œê°€ Base 64ë¡œ ë””ì½”ë”© ë° íŒŒì‹±.
+		// ì¦‰, í—¤ë”ì™€ í˜ì´ë¡œë“œë¥¼ setSigningKeyë¡œ ë„˜ì–´ì˜¨ ì‹œí¬ë¦¿ì„ ì´ìš© í•´ ì„œëª… í›„, tokenì˜ ì„œëª… ê³¼ ë¹„êµ.
+		// ìœ„ì¡°ë˜ì§€ ì•Šì•˜ë‹¤ë©´ í˜ì´ë¡œë“œ(Claims) ë¦¬í„´
+		// ê·¸ ì¤‘ ìš°ë¦¬ëŠ” userIdê°€ í•„ìš”í•˜ë¯€ë¡œ getBodyë¥¼ ë¶€ë¥¸ë‹¤.
 		Claims claims = Jwts.parser()
-						.setSigningKey(SECRET_KEY)  //À§¿¡ ÀÛ¼ºÇÑ »ó¼öÅ°·Î ¼­¸í
-						.parseClaimsJws(token)  //base64·Î µğÄÚµù ¹× ÆÄ½Ì
-						.getBody(); //¹Ùµğ ³»¿ë ÃßÃâ
+						.setSigningKey(SECRET_KEY)  //ìœ„ì— ì‘ì„±í•œ ìƒìˆ˜í‚¤ë¡œ ì„œëª…
+						.parseClaimsJws(token)  //base64ë¡œ ë””ì½”ë”© ë° íŒŒì‹±
+						.getBody(); //ë°”ë”” ë‚´ìš© ì¶”ì¶œ
 
-		return claims.getSubject();    //ÀÎÄÚµù ½Ã ¼­ºêÁ§Æ®¿¡ ¾ÆÀÌµğ¸¦ ¼ÂÆÃÇØÁá´ø°Å ÃßÃâÇÑ´Ù.
+		return claims.getSubject();    //ì¸ì½”ë”© ì‹œ ì„œë¸Œì íŠ¸ì— ì•„ì´ë””ë¥¼ ì…‹íŒ…í•´ì¤¬ë˜ê±° ì¶”ì¶œí•œë‹¤.
 	}
 }

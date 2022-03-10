@@ -16,7 +16,7 @@ public class TodoService {
 	private final TodoMapper todoMapper;
 	
 	/*
-	 * TODO¸®½ºÆ® Á¶È¸
+	 * TODOë¦¬ìŠ¤íŠ¸ ì¡°íšŒ
 	 */
 	public List<TodoDto> retrieve(final String userId) {
 		
@@ -27,13 +27,13 @@ public class TodoService {
 	}	
 	
 	/*
-	 * TODO °Ô½Ã±Û »ı¼º
+	 * TODO ê²Œì‹œê¸€ ìƒì„±
 	 */
 	
 	public List<TodoDto> insertTodo(final TodoDto todoDto) {
 		
 
-		validate(todoDto); //°ËÁõ
+		validate(todoDto); //ê²€ì¦
 
 		todoMapper.insertTodo(todoDto);
 		
@@ -42,12 +42,12 @@ public class TodoService {
 	
 	
 	/*
-	 * TODO °Ô½Ã±Û ¼öÁ¤
+	 * TODO ê²Œì‹œê¸€ ìˆ˜ì •
 	 */	
 	public List<TodoDto> updateTodo(final TodoDto todoDto) {
 		
 
-		validate(todoDto); //°ËÁõ
+		validate(todoDto); //ê²€ì¦
 
 		todoMapper.updateTodo(todoDto);
 		
@@ -56,18 +56,18 @@ public class TodoService {
 	}
 
 	/*
-	 * TODO °Ô½Ã±Û »èÁ¦
+	 * TODO ê²Œì‹œê¸€ ì‚­ì œ
 	 */
 	public List<TodoDto> deleteTodo(final TodoDto todoDto) {
 		
-		validate(todoDto); //°ËÁõ
+		validate(todoDto); //ê²€ì¦
 		
 		try {
 			todoMapper.deleteTodo(todoDto);
 		} catch(Exception e) {
 
 			log.error("error deleting entity ", todoDto.getId(), e);
-			// (4) ÄÁÆ®·Ñ·¯·Î exceptionÀ» ³¯¸°´Ù. µ¥ÀÌÅÍº£ÀÌ½º ³»ºÎ ·ÎÁ÷À» Ä¸½¶È­ ÇÏ±â À§ÇØ e¸¦ ¸®ÅÏÇÏÁö ¾Ê°í »õ exception ¿ÀºêÁ§Æ®¸¦ ¸®ÅÏÇÑ´Ù.
+			// (4) ì»¨íŠ¸ë¡¤ëŸ¬ë¡œ exceptionì„ ë‚ ë¦°ë‹¤. ë°ì´í„°ë² ì´ìŠ¤ ë‚´ë¶€ ë¡œì§ì„ ìº¡ìŠí™” í•˜ê¸° ìœ„í•´ eë¥¼ ë¦¬í„´í•˜ì§€ ì•Šê³  ìƒˆ exception ì˜¤ë¸Œì íŠ¸ë¥¼ ë¦¬í„´í•œë‹¤.
 			throw new RuntimeException("error deleting entity " + todoDto.getId());
 		}
 		
@@ -76,7 +76,7 @@ public class TodoService {
 
 	
 	
-	//°ËÁõ
+	//ê²€ì¦
 	private void validate(final TodoDto todoDto) {
 		//validations
 		if(todoDto ==null) {

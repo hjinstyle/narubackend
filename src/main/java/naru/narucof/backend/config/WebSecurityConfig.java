@@ -18,26 +18,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// http ½ÃÅ¥¸®Æ¼ ºô´õ
-		http.cors() // WebMvcConfig¿¡¼­ ÀÌ¹Ì ¼³Á¤ÇßÀ¸¹Ç·Î ±âº» cors ¼³Á¤.
+		// http ì‹œíë¦¬í‹° ë¹Œë”
+		http.cors() // WebMvcConfigì—ì„œ ì´ë¯¸ ì„¤ì •í–ˆìœ¼ë¯€ë¡œ ê¸°ë³¸ cors ì„¤ì •.
 				.and()
-				.csrf()// csrf´Â ÇöÀç »ç¿ëÇÏÁö ¾ÊÀ¸¹Ç·Î disable
+				.csrf()// csrfëŠ” í˜„ì¬ ì‚¬ìš©í•˜ì§€ ì•Šìœ¼ë¯€ë¡œ disable
 						.disable()
-				.httpBasic()// tokenÀ» »ç¿ëÇÏ¹Ç·Î basic ÀÎÁõ disable
+				.httpBasic()// tokenì„ ì‚¬ìš©í•˜ë¯€ë¡œ basic ì¸ì¦ disable
 						.disable()
-				.sessionManagement()  // session ±â¹İÀÌ ¾Æ´ÔÀ» ¼±¾ğ
+				.sessionManagement()  // session ê¸°ë°˜ì´ ì•„ë‹˜ì„ ì„ ì–¸
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.authorizeRequests() // /¿Í /auth/** °æ·Î´Â ÀÎÁõ ¾ÈÇØµµ µÊ.
+				.authorizeRequests() // /ì™€ /auth/** ê²½ë¡œëŠ” ì¸ì¦ ì•ˆí•´ë„ ë¨.
 						.antMatchers("/", "/auth/**").permitAll()
 						//.antMatchers("/","/todo", "/auth/**").permitAll()
-				.anyRequest() // /¿Í /auth/**ÀÌ¿ÜÀÇ ¸ğµç °æ·Î´Â ÀÎÁõ ÇØ¾ßµÊ.
+				.anyRequest() // /ì™€ /auth/**ì´ì™¸ì˜ ëª¨ë“  ê²½ë¡œëŠ” ì¸ì¦ í•´ì•¼ë¨.
 						.authenticated();
 
-		// filter µî·Ï.
-		// ¸Å ¸®Äù½ºÆ®¸¶´Ù
-		// CorsFilter ½ÇÇàÇÑ ÈÄ¿¡
-		// jwtAuthenticationFilter ½ÇÇàÇÑ´Ù.
+		// filter ë“±ë¡.
+		// ë§¤ ë¦¬í€˜ìŠ¤íŠ¸ë§ˆë‹¤
+		// CorsFilter ì‹¤í–‰í•œ í›„ì—
+		// jwtAuthenticationFilter ì‹¤í–‰í•œë‹¤.
 		http.addFilterAfter(
 						jwtAuthenticationFilter,
 						CorsFilter.class

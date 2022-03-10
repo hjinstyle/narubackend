@@ -13,7 +13,7 @@ import naru.narucof.backend.dto.UserDto;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor    //userMapper¼±¾ğÇÒ¶§ »ı¼ºÀÚ ±¸Áö ¸¸µéÇÊ¿ä¾ø¾î¼­ ¼±¾ğÇÔ.
+@RequiredArgsConstructor    //userMapperì„ ì–¸í• ë•Œ ìƒì„±ì êµ¬ì§€ ë§Œë“¤í•„ìš”ì—†ì–´ì„œ ì„ ì–¸í•¨.
 public class UserService {
 
 	private final UserMapper userMapper;
@@ -23,29 +23,29 @@ public class UserService {
 	
 	
 	/*
-	 * À¯Àú È¸¿ø°¡ÀÔ
+	 * ìœ ì € íšŒì›ê°€ì…
 	 */
 	public int signUp(final UserDto userDto) {
 		
-		//ÀÎÇ²°ªÀÌ ³ÎÀÌ¸é ¿¹¿ÜÃ³¸®
+		//ì¸í’‹ê°’ì´ ë„ì´ë©´ ì˜ˆì™¸ì²˜ë¦¬
 		if(userDto == null || userDto.getEmail() == null || userDto.getEmail().equals("") || userDto.getPassword().equals("") || userDto.getUserName().equals("")) {
-			throw new RuntimeException("ÀÔ·Â°ªÀ» ¸ğµÎ ³Ö¾îÁÖ¼¼¿ä.");
+			throw new RuntimeException("ì…ë ¥ê°’ì„ ëª¨ë‘ ë„£ì–´ì£¼ì„¸ìš”.");
 		}
 
-		//ÀÌ¸ŞÀÏ·Î userÅ×ÀÌºí Á¶È¸ÇÏ¿©, ÀÌ¹Ì Á¸ÀçÇÏ´Â »ç¶÷ÀÎÁö È®ÀÎÇÑ´Ù.
+		//ì´ë©”ì¼ë¡œ userí…Œì´ë¸” ì¡°íšŒí•˜ì—¬, ì´ë¯¸ ì¡´ì¬í•˜ëŠ” ì‚¬ëŒì¸ì§€ í™•ì¸í•œë‹¤.
 		List<UserDto> userList = userMapper.selectFindByEmail(userDto);
 		
-		//°èÁ¤ÀÌ ÀÌ¹ÌÁ¸ÀçÇÒ°æ¿ì ¿¹¿ÜÃ³¸® ¸®ÅÏÇÔ.
+		//ê³„ì •ì´ ì´ë¯¸ì¡´ì¬í• ê²½ìš° ì˜ˆì™¸ì²˜ë¦¬ ë¦¬í„´í•¨.
 		if(userList!=null && userList.size()>0) {
 			log.warn("Email already exists {}", userList.get(0).getEmail());
-			throw new RuntimeException("ÀÌ¹Ì Á¸ÀçÇÏ´Â °èÁ¤ÀÔ´Ï´Ù.");
+			throw new RuntimeException("ì´ë¯¸ ì¡´ì¬í•˜ëŠ” ê³„ì •ì…ë‹ˆë‹¤.");
 		}
 
 		
-		//ÆĞ½º¿öµå ¾ÏÈ£È­
+		//íŒ¨ìŠ¤ì›Œë“œ ì•”í˜¸í™”
 		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 	
-		//insertÃ³¸® (±âÁ¸¿¡ ¾ø´Â È¸¿øÀÌ¶ó¸é È¸¿ø°¡ÀÔ Ã³¸®ÇÔ) 
+		//insertì²˜ë¦¬ (ê¸°ì¡´ì— ì—†ëŠ” íšŒì›ì´ë¼ë©´ íšŒì›ê°€ì… ì²˜ë¦¬í•¨) 
 		return userMapper.insertSignUp(userDto);
 		
 		
@@ -54,17 +54,17 @@ public class UserService {
 	
 	
 	/*
-	 * À¯Àú ·Î±×ÀÎ
+	 * ìœ ì € ë¡œê·¸ì¸
 	 */
 	public UserDto signIn(final UserDto userDto) {
 		
 		
-		//ÀÌ¸ŞÀÏ·Î userÅ×ÀÌºí Á¶È¸ÇÏ¿©, ÀÌ¹Ì Á¸ÀçÇÏ´Â »ç¶÷ÀÎÁö È®ÀÎÇÑ´Ù.
+		//ì´ë©”ì¼ë¡œ userí…Œì´ë¸” ì¡°íšŒí•˜ì—¬, ì´ë¯¸ ì¡´ì¬í•˜ëŠ” ì‚¬ëŒì¸ì§€ í™•ì¸í•œë‹¤.
 		List<UserDto> userList = userMapper.selectFindByEmail(userDto);
 		
-		// matches ¸Ş¼­µå¸¦ ÀÌ¿ëÇØ ÆĞ½º¿öµå°¡ °°ÀºÁö È®ÀÎ
+		// matches ë©”ì„œë“œë¥¼ ì´ìš©í•´ íŒ¨ìŠ¤ì›Œë“œê°€ ê°™ì€ì§€ í™•ì¸
 		if(userList != null && userList.size()>0 && passwordEncoder.matches(userDto.getPassword(), userList.get(0).getPassword())) {
-			//ÀÏÄ¡ÇÑ´Ù¸é, À¯ÀúÁ¤º¸ ¸®ÅÏÇØÁÜ.
+			//ì¼ì¹˜í•œë‹¤ë©´, ìœ ì €ì •ë³´ ë¦¬í„´í•´ì¤Œ.
 			return userList.get(0);
 		}
 		return null;
